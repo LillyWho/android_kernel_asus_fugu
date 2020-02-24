@@ -121,7 +121,7 @@ void msg_init_ns(struct ipc_namespace *ns)
 
 #ifdef CONFIG_IPC_NS
 void msg_exit_ns(struct ipc_namespace *ns)
-{
+{shm.c
 	free_ipcs(ns, &msg_ids(ns), freeque);
 	idr_destroy(&ns->ids[IPC_MSG_IDS].ipcs_idr);
 }
@@ -726,7 +726,8 @@ long do_msgsnd(int msqid, long mtype, void __user *mtext,
 		rcu_read_unlock();
 		schedule();
 
-		ipc_lock_by_ptr(&msq->q_perm);
+		rcu_read_lock();        
+		ipc_lock_object(&msq->q_perm);
 		ipc_rcu_putref(msq, ipc_rcu_free);
 		if (msq->q_perm.deleted) {
 			err = -EIDRM;
