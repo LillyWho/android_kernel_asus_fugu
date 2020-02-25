@@ -89,7 +89,7 @@
 
 #include <asm/uaccess.h>
 #include "util.h"
-
+#define ipc_smp_acquire__after_spin_is_unlocked()	smp_rmb()
 /* One semaphore structure for each semaphore in the system. */
 struct sem {
 	int	semval;		/* current value */
@@ -268,6 +268,8 @@ static inline int sem_lock(struct sem_array *sma, struct sembuf *sops,
 		}
 		spin_unlock(&sem->lock);
 	}
+	
+#define ipc_smp_acquire__after_spin_is_unlocked()	smp_rmb()
 
 	/* slow path: acquire the full lock */
 	ipc_lock_object(&sma->sem_perm);
