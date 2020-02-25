@@ -29,7 +29,7 @@ ifeq ($(CONFIG_X86_32),y)
                 LDFLAGS_vmlinux := --emit-relocs
         endif
 
-        KBUILD_CFLAGS += -msoft-float -mregparm=3 -freg-struct-return
+        KBUILD_CFLAGS += -mregparm=3 -freg-struct-return
 
         # Don't autogenerate MMX or SSE instructions
         KBUILD_CFLAGS += -mno-mmx -mno-sse
